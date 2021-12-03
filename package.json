@@ -1,9 +1,9 @@
 {
-  "name": "Dairy Growth",
+  "name": "DairyGrowth",
   "version": "1.0.0",
   "private": true,
   "author": "Activex",
-  "description": "Dairy Growth",
+  "description": "DairyGrowth",
   "dependencies": {
     "@emotion/cache": "^11.4.0",
     "@emotion/react": "^11.4.1",
@@ -24,10 +24,12 @@
     "react-dom": "17.0.2",
     "react-flatpickr": "3.10.7",
     "react-github-btn": "1.2.1",
+    "react-hook-form": "^7.20.5",
     "react-router-dom": "5.2.0",
     "react-scripts": "4.0.3",
     "stylis": "4.0.10",
     "stylis-plugin-rtl": "2.1.0",
+    "thaidatepicker-react": "^0.1.5",
     "uuid": "8.3.2",
     "web-vitals": "1.0.1"
   },

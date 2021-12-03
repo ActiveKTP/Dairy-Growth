@@ -4,7 +4,7 @@ import SuiTypography from "components/SuiTypography";
 import SuiAvatar from "components/SuiAvatar";
 import SuiBadge from "components/SuiBadge";
 
-import useFetch from "useFetch";
+import useFetch from "controller/useFetch";
 
 // Images
 import cowpic from "assets/images/cow-4.png";
@@ -65,7 +65,7 @@ function Row(growths, setValueCowId) {
     );*/
     //const sidenavColors = ["primary", "dark", "info", "success", "warning", "error"];
     //const action = (<MonitorWeightIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" color="disabled" />);
-    const setValue = (ccowId) => {
+    const setValue = (ccowId, gTranId) => {
         setValueCowId.setCowId(ccowId);
         setValueCowId.setGstatus('01');
         setValueCowId.closeInput();
@@ -77,15 +77,15 @@ function Row(growths, setValueCowId) {
         ฟาร์ม: <Function first={growth.fFarmId} second={growth.fName} />,
         อำเภอ: <Function first={growth.fAmphurName} second={growth.fProvinceName} />,
         น้ำหนัก: <SuiTypography variant="button" color="text" fontWeight="medium">{null === growth.gWeight ? "" : growth.gWeight}</SuiTypography>,
-        action: (<MonitorWeightIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" color={null === growth.gWeight ? "disabled" : "success"}
-            onClick={event => setValue(growth.ccowId)}
+        action: (<MonitorWeightIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" color={null === growth.gTranId ? "disabled" : "success"}
+            onClick={event => setValue(growth.ccowId, growth.gTranId)}
         />),
     }))
     return row;
 }
 
 export default function Growth4(props) {
-    console.log(props);
+    //console.log(props);
     /*
     const testURL = 'https://localhost:5001/api/growth/farm/cow/01/05/2019/4';
     const myInit = {
@@ -116,7 +116,7 @@ export default function Growth4(props) {
         </div>
     );*/
 
-    const { data: growths, isPending, error } = useFetch('https://localhost:5001/api/growth/farm/cow/01/05/2019/10');
+    const { data: growths, isPending, error } = useFetch('https://localhost:5001/api/growth/farm/cow/01/05/2019/10', props.inputData);
     const growthsList = Row(growths, props);
 
     return {

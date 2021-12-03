@@ -4,7 +4,7 @@ import SuiTypography from "components/SuiTypography";
 import SuiAvatar from "components/SuiAvatar";
 import SuiBadge from "components/SuiBadge";
 
-import useFetch from "useFetch";
+import useFetch from "controller/useFetch";
 
 // Images
 import cowpic from "assets/images/cow-18.png";
@@ -58,7 +58,7 @@ function Siredam({ sire, dam }) {
 }
 
 function Row(growths, setValueCowId) {
-    const setValue = (ccowId) => {
+    const setValue = (ccowId, gTranId) => {
         setValueCowId.setCowId(ccowId);
         setValueCowId.setGstatus('03');
         setValueCowId.closeInput();
@@ -70,8 +70,8 @@ function Row(growths, setValueCowId) {
         ฟาร์ม: <Function first={growth.fFarmId} second={growth.fName} />,
         อำเภอ: <Function first={growth.fAmphurName} second={growth.fProvinceName} />,
         น้ำหนัก: <SuiTypography variant="button" color="text" fontWeight="medium">{null === growth.gWeight ? "" : growth.gWeight}</SuiTypography>,
-        action: (<MonitorWeightIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" color={null === growth.gWeight ? "disabled" : "success"}
-            onClick={event => setValue(growth.ccowId)}
+        action: (<MonitorWeightIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" color={null === growth.gTranId ? "disabled" : "success"}
+            onClick={event => setValue(growth.ccowId, growth.gTranId)}
         />),
     }))
     return row;
@@ -79,7 +79,7 @@ function Row(growths, setValueCowId) {
 
 export default function Growth18(props) {
 
-    const { data: growths, isPending, error } = useFetch('https://localhost:5001/api/growth/farm/cow/03/05/2019/10');
+    const { data: growths, isPending, error } = useFetch('https://localhost:5001/api/growth/farm/cow/03/05/2019/10', props.inputData);
     const growthsList = Row(growths, props);
 
     return {

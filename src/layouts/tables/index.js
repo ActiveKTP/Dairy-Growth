@@ -20,10 +20,12 @@ import Growth4 from "layouts/tables/data/growth4";
 import Growth12 from "layouts/tables/data/growth12";
 import Growth18 from "layouts/tables/data/growth18";
 import Growth_cv from "layouts/tables/data/growth_cv";
+import Growth from "layouts/tables/data/growth";
 
 function Tables() {
   const [inputData, setInputData] = useState(false);
   const [cowId, setCowId] = useState(null);
+  //const [gTranId, setgTranId] = useState(null)
   const [gStatus, setGstatus] = useState(null);
 
   const { columns, rows } = authorsTableData;
@@ -35,7 +37,7 @@ function Tables() {
     setInputData(!inputData);
   }
 
-  const setValueCowId = { setCowId, setGstatus, closeInput };
+  const setValueCowId = { setCowId, setGstatus, closeInput, inputData };
 
   const { columns: gfCols, rows: gfRows } = Growth4(setValueCowId);
   const { columns: g12Cols, rows: g12Rows } = Growth12(setValueCowId);
@@ -88,7 +90,7 @@ function Tables() {
         <SuiBox mb={3}>
           <Card>
             <SuiBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-              <SuiTypography variant="h6">โคอายุ 4 เดือน {cowId + " " + gStatus}</SuiTypography>
+              <SuiTypography variant="h6">โคอายุ 4 เดือน</SuiTypography>
             </SuiBox>
             <SuiBox
               sx={{

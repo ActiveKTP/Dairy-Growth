@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const useFetch = (url) => {
+const useFetch = (url, props) => {
     const [data, setData] = useState([]);
     const [isPending, setIsPending] = useState(true);
     const [error, setError] = useState(null);
@@ -22,11 +22,11 @@ const useFetch = (url) => {
                 if (!res.ok) { // error coming back from server
                     throw Error('could not fetch the data for that resource');
                 }
-                console.log(res)
+                //console.log(res)
                 return res.json();
             })
             .then(data => {
-                console.log(data)
+                //console.log(data)
                 setIsPending(false);
                 setData(data);
                 setError(null);
@@ -36,7 +36,7 @@ const useFetch = (url) => {
                 setIsPending(false);
                 setError(err.message);
             })
-    }, [url])
+    }, [props])
 
     return { data, isPending, error };
 }

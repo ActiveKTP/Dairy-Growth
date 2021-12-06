@@ -7,9 +7,11 @@ import SuiAvatar from "components/SuiAvatar";
 import useFetch from "controller/useFetch";
 
 // Images
-import cowpic from "assets/images/cow-a.png";
+import cowpic from "assets/images/cow-18.png";
 //import logoSlack from "assets/images/small-logos/logo-slack.svg";
-import ScaleIcon from '@mui/icons-material/Scale';
+//import Icon from "@mui/material/Icon";
+//import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+import MonitorWeightIcon from '@mui/icons-material/MonitorWeight';
 
 function Author({ image, name, cowId }) {
     return (
@@ -56,12 +58,9 @@ function Siredam({ sire, dam }) {
 }
 
 function Row(growths, setValueCowId) {
-    //const { cowId, setCowId } = useContext(UserContext);
-    //console.log(value)
-    //const changeHandler = event => value.setCowId('1234');
     const setValue = (ccowId, gTranId) => {
         setValueCowId.setCowId(ccowId);
-        setValueCowId.setGstatus('02');
+        setValueCowId.setGstatus('03');
         setValueCowId.closeInput();
     }
     const row = growths.map((growth) => ({
@@ -71,17 +70,16 @@ function Row(growths, setValueCowId) {
         ฟาร์ม: <Function first={growth.fFarmId} second={growth.fName} />,
         อำเภอ: <Function first={growth.fAmphurName} second={growth.fProvinceName} />,
         น้ำหนัก: <SuiTypography variant="button" color="text" fontWeight="medium">{null === growth.gWeight ? "" : growth.gWeight}</SuiTypography>,
-        action: (<ScaleIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" color={null === growth.gTranId ? "disabled" : "success"}
+        action: (<MonitorWeightIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" color={null === growth.gTranId ? "disabled" : "success"}
             onClick={event => setValue(growth.ccowId, growth.gTranId)}
         />),
     }))
     return row;
 }
 
-export default function Growth12(props) {
-    //console.log(props);
+export default function data(props) {
 
-    const { data: growths, isPending, error } = useFetch('https://localhost:5001/api/growth/farm/cow/02/05/2019/10?_start=0&_limit=5', props.refreshData);
+    const { data: growths, isPending, error } = useFetch('https://localhost:5001/api/growth/farm/cow/03/05/2019/10', props.refreshData);
     const growthsList = Row(growths, props);
 
     return {

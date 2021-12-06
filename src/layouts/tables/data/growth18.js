@@ -79,7 +79,7 @@ function Row(growths, setValueCowId) {
 
 export default function Growth18(props) {
 
-    const { data: growths, isPending, error } = useFetch('https://localhost:5001/api/growth/farm/cow/03/05/2019/10', props.inputData);
+    const { data: growths, isPending, error } = useFetch('https://localhost:5001/api/growth/farm/cow/03/05/2019/10?_start=0&_limit=5', props.refreshData);
     const growthsList = Row(growths, props);
 
     return {

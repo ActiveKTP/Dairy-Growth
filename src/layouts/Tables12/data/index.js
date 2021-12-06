@@ -78,10 +78,10 @@ function Row(growths, setValueCowId) {
     return row;
 }
 
-export default function Growth12(props) {
+export default function data(props) {
     //console.log(props);
 
-    const { data: growths, isPending, error } = useFetch('https://localhost:5001/api/growth/farm/cow/02/05/2019/10?_start=0&_limit=5', props.refreshData);
+    const { data: growths, isPending, error } = useFetch('https://localhost:5001/api/growth/farm/cow/02/05/2019/10', props.refreshData);
     const growthsList = Row(growths, props);
 
     return {

@@ -116,7 +116,7 @@ export default function Growth4(props) {
         </div>
     );*/
 
-    const { data: growths, isPending, error } = useFetch('https://localhost:5001/api/growth/farm/cow/01/05/2019/10', props.inputData);
+    const { data: growths, isPending, error } = useFetch('https://localhost:5001/api/growth/farm/cow/01/05/2019/10?_start=0&_limit=5', props.refreshData);
     const growthsList = Row(growths, props);
 
     return {

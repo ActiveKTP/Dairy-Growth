@@ -10,6 +10,8 @@ import useFetch from "controller/useFetch";
 import cowpic from "assets/images/cow-fcv.png";
 //import logoSlack from "assets/images/small-logos/logo-slack.svg";
 import ScaleIcon from '@mui/icons-material/Scale';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+
 
 function Author({ image, name, cowId }) {
     return (
@@ -42,14 +44,14 @@ function Function({ first, second }) {
     );
 }
 
-function Siredam({ sire, dam }) {
+function Mating({ maDate, semen }) {
     return (
         <SuiBox display="flex" flexDirection="column">
-            <SuiTypography variant="caption" fontWeight="medium" color="info">
-                {sire}
+            <SuiTypography variant="caption" fontWeight="medium" color="text">
+                {maDate}
             </SuiTypography>
-            <SuiTypography variant="caption" color="primary">
-                {dam}
+            <SuiTypography variant="caption" color="info">
+                {semen}
             </SuiTypography>
         </SuiBox>
     );
@@ -61,12 +63,22 @@ function Row(growths, setValueCowId) {
         setValueCowId.setGstatus('04');
         setValueCowId.closeInput();
     }
+    const setValue_cv = (ccowId, maTranId) => {
+        setValueCowId.setCowId(ccowId);
+        setValueCowId.setmaTranId(maTranId);
+        setValueCowId.setGstatus('04');
+        setValueCowId.closeInput_cv();
+    }
     const row = growths.map((growth) => ({
         ข้อมูลโค: <Author image={cowpic} name={growth.ccowName} cowId={growth.ccowId} />,
-        พ่อแม่: <Siredam sire={growth.cSireId === null ? "" : growth.cSireId} dam={growth.cDamId === null ? "" : growth.cDamId} />,
-        วันเกิด: <Function first={growth.cBirthDate_th} second={growth.age_day} />,
+        ข้อมูการผสม: <Mating maDate={growth.maDate_th === null ? "" : growth.maDate_th} semen={growth.maSemenId === null ? "" : growth.maSemenId} />,
+        กำหนดคลอด: <Function first={growth.predicCalvingDate_th} second={growth.maPregResult} />,
         ฟาร์ม: <Function first={growth.fFarmId} second={growth.fName} />,
         อำเภอ: <Function first={growth.fAmphurName} second={growth.fProvinceName} />,
+        วันคลอด: <SuiTypography variant="button" color="text" fontWeight="medium">{null === growth.cvgDate_th ? "" : growth.cvgDate_th}</SuiTypography>,
+        action_cv: (<AddBoxIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" color={null === growth.cvgTranId ? "disabled" : "success"}
+            onClick={event => setValue_cv(growth.ccowId, growth.maTranId)}
+        />),
         น้ำหนัก: <SuiTypography variant="button" color="text" fontWeight="medium">{null === growth.gWeight ? "" : growth.gWeight}</SuiTypography>,
         action: (<ScaleIcon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" color={null === growth.gTranId ? "disabled" : "success"}
             onClick={event => setValue(growth.ccowId, growth.gTranId)}
@@ -75,18 +87,21 @@ function Row(growths, setValueCowId) {
     return row;
 }
 
-export default function Growth12(props) {
-
-    const { data: growths, isPending, error } = useFetch('https://localhost:5001/api/growth/farm/cow/cv/05/2019/10', props.inputData);
+export default function Growth_cv(props, inputData_cv) {
+    //console.log(props)
+    //console.log(inputData_cv)
+    const { data: growths, isPending, error } = useFetch('https://localhost:5001/api/growth/farm/cow/cv/05/2019/10?_start=0&_limit=5', props.refreshData);
     const growthsList = Row(growths, props);
 
     return {
         columns: [
             { name: "ข้อมูลโค", align: "left" },
-            { name: "พ่อแม่", align: "left" },
-            { name: "วันเกิด", align: "left" },
+            { name: "ข้อมูการผสม", align: "left" },
+            { name: "กำหนดคลอด", align: "left" },
             { name: "ฟาร์ม", align: "left" },
             { name: "อำเภอ", align: "left" },
+            { name: "วันคลอด", align: "center" },
+            { name: "action_cv", align: "center" },
             { name: "น้ำหนัก", align: "center" },
             { name: "action", align: "center" },
         ],

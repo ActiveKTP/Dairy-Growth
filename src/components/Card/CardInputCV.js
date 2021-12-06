@@ -1,7 +1,7 @@
 //import React from "react";
 import { useState, useEffect } from "react";
 import dayjs from 'dayjs'
-import { WatDatePicker } from 'thaidatepicker-react'
+import { WatDatePicker } from "thaidatepicker-react";
 import { useForm } from "react-hook-form";
 
 // react-router-dom components
@@ -18,6 +18,13 @@ import SuiTypography from "components/SuiTypography";
 import SuiInput from "components/SuiInput";
 import SuiButton from "components/SuiButton";
 import SuiAlert from "components/SuiAlert";
+//
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+//
 
 // Authentication layout components
 import Socials from "layouts/authentication/components/Socials";
@@ -34,12 +41,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
-import useFetch from "controller/useFetch";
+//import useFetch from "controller/useFetch";
 import CheckStaff from "controller/checkStaff";
-import GetMeasure from "controller/GetMeasure";
+import GetCalvingByCowId from "controller/GetCalvingByCowId";
 import CreateMeasure from "controller/CreateMeasure";
 import UpdateMeasure from "controller/UpdateMeasure";
 import DeleteMeasure from "controller/DeleteMeasure";
+
+import GetCalvingBymaTranId from "controller/GetCalvingBymaTranId";
 
 // Custom styles for DashboardNavbar
 import {
@@ -47,72 +56,72 @@ import {
 } from "examples/Navbars/DashboardNavbar/styles";
 
 
-export default function CardSettings(props) {
-    let gStatusTitle = null;
-
-    if (props.gStatus == '01') gStatusTitle = 'โคอายุ 4 เดือน'
-    else if (props.gStatus == '02') gStatusTitle = 'โคอายุ 12 เดือน'
-    else if (props.gStatus == '03') gStatusTitle = 'โคอายุ 18 เดือน'
-    else if (props.gStatus == '04') gStatusTitle = 'โคคลอดลูกตัวแรก'
-    //const current = dayjs().date() + '/' + dayjs().month() + '/' + (dayjs().year() + 543)
-    //const minDate = dayjs().date() + '/' + dayjs().month() + '/' + (dayjs().year() + 542)
+export default function CardInputCV(props) {
     const current = dayjs().format('YYYY-MM-DD')
     const minDate = dayjs().add(-1, 'year').format('YYYY-MM-DD')
-    //const numberWithoutMemo = getTimestamp()
-    //const { data: cow, isPending, error } = useFetch('https://localhost:5001/api/growth/cow/' + props.gStatus + '/' + props.cowId);
-    const title = " : วัดน้ำหนักโค"
+    const title = " : คลอด";
     const [cowId, setCowId] = useState(props.cowId);
-    const [gStatus, setgStatus] = useState(props.gStatus);
-    const [gStatusName, setgStatusName] = useState(gStatusTitle);
 
-    const [gTranId, setgTranId] = useState('');
+    const [cvgTranId, setcvgTranId] = useState(null);
     const [ccowNo, setccowNo] = useState('');
     const [ccowName, setccowName] = useState('');
     const [cBirthDate_th, setcBirthDate] = useState('');
     const [age_day, setage_day] = useState('');
     const [cSireId, setcSireId] = useState('');
     const [cDamId, setcDamId] = useState('');
-    const [cSex_title, setcSex_title] = useState('');
+    //const [cSex_title, setcSex_title] = useState('');
     const [fFarmId, setfFarmId] = useState('');
     const [fName, setfName] = useState('')
-    const [selectedDate, setSelectedDate] = useState('');
-    const [gMeasureDate, setgMeasureDate] = useState('');
-    const [gWeight, setgWeight] = useState('');
-    const [gRemark, setgRemark] = useState('');
+    const [maDate, setmaDate] = useState('');
+    const [maSemenId, setmaSemenId] = useState('');
+    const [selectedDate, setSelectedDate] = useState(current);
+    const [cvgDate, setcvgDate] = useState(dayjs().format('DD') + '/' + dayjs().format('MM') + '/' + (dayjs().year() + 543));
+    //const [gWeight, setgWeight] = useState('');
+    //const [gRemark, setgRemark] = useState('');
+    const [firstChild, setfirstChild] = useState("0");
+    const [secondChild, setSecondChild] = useState("0");
     const [gEvaluator, setgEvaluator] = useState('');
     const [gEvaluatorName, setgEvaluatorName] = useState('');
     const [checkStaffStatus, setcheckStaffStatus] = useState(false)
     const [saveStatus, setSaveStatus] = useState(false)
-    const [addStatus, setaddStatus] = useState('')
+    const [addStatus, setaddStatus] = useState('add')
     const [deleteStatus, setDeleteStatus] = useState(false)
     const [isPending, setIsPending] = useState(true);
     const [error, setError] = useState(null);
-    const [data, setData] = useState(false);
+    const [reTurnData, setreTurnData] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
-            const cow = await GetMeasure({ cowId: props.cowId, gStatus: props.gStatus });
-            setgTranId(cow.gTranId)
+            const cow = await GetCalvingByCowId({ cowId: props.cowId, gStatus: props.gStatus });
             setccowNo(cow.ccowNo)
             setccowName(cow.ccowName)
             setcBirthDate(cow.cBirthDate_th)
             setage_day(cow.age_day)
             setcSireId(cow.cSireId === null ? '' : cow.cSireId)
             setcDamId(cow.cDamId === null ? '' : cow.cDamId)
-            setcSex_title(cow.cSex_title)
+            //setcSex_title(cow.cSex_title)
             setfFarmId(cow.fFarmId)
             setfName(cow.fName)
-            setSelectedDate(cow.gMeasureDate === null ? current : cow.gMeasureDate)
-            setgMeasureDate(cow.gMeasureDate_th === null ? dayjs().format('DD') + '/' + dayjs().format('MM') + '/' + (dayjs().year() + 543) : cow.gMeasureDate_th)
-            setgWeight(cow.gWeight === null ? '' : cow.gWeight)
-            setgRemark(cow.gRemark === null ? '' : cow.gRemark)
-            setgEvaluator(cow.gEvaluator === null ? '' : cow.gEvaluator)
+            setmaDate(cow.maDate_th)
+            setmaSemenId(cow.maSemenId)
+            //setgWeight(cow.gWeight === null ? '' : cow.gWeight)
+            //setgRemark(cow.gRemark === null ? '' : cow.gRemark)
             setIsPending(false);
-            setData(true)
-            setaddStatus(cow.gTranId === null ? 'add' : 'edit')
-            setcheckStaffStatus(cow.gTranId === null ? false : true)
             setError(cow.error);
-            const staff = await CheckStaff(cow.gEvaluator);
+            setreTurnData(true)
+
+            const calving = await GetCalvingBymaTranId(props.maTranId);
+            if (calving) {
+                setcvgTranId(calving.cvgTranId)
+                setSelectedDate(calving.cvgDate === null ? current : calving.cvgDate)
+                setcvgDate(calving.cvgDate === null ? dayjs().format('DD') + '/' + dayjs().format('MM') + '/' + (dayjs().year() + 543) : calving.cvgDate)
+                setfirstChild(calving.firstChild)
+                setSecondChild(calving.secondChild)
+                setgEvaluator(calving.cvgStaffId === null ? '' : calving.cvgStaffId)
+                setaddStatus(calving.cvgTranId === null ? 'add' : 'edit')
+                setcheckStaffStatus(calving.cvgTranId === null ? false : true)
+            }
+            const staff = await CheckStaff(gEvaluator);
             if (staff) {
                 setgEvaluatorName(staff.StaffFullName)
             }
@@ -122,16 +131,9 @@ export default function CardSettings(props) {
 
     const handleDatePickerChange = (christDate, buddhistDate) => {
         setSelectedDate(christDate)
-        setgMeasureDate(dayjs(buddhistDate).format('DD/MM/YYYY'))
-        const myContainer = register("gMeasureDate")
+        setcvgDate(dayjs(buddhistDate).format('DD/MM/YYYY'))
+        const myContainer = register("cvgDate")
     }
-
-    /*async function handleCheckStaff() {
-        const staff = await CheckStaff(gEvaluator);
-        setgEvaluatorName(staff.StaffFullName)
-        setcheckStaffStatus(true)
-        //console.log(staff.StaffFullName)
-    }*/
 
     const handleCheckStaff = async () => {
         const staff = await CheckStaff(gEvaluator);
@@ -160,7 +162,7 @@ export default function CardSettings(props) {
     const handleDeleteButton = async () => {
         setSaveStatus(true)
         setDeleteStatus(!deleteStatus)
-        const measure = await DeleteMeasure(gTranId);
+        const measure = await DeleteMeasure(cvgTranId);
         if (measure) {
             setSaveStatus(false)
             props.closeInput();
@@ -177,24 +179,21 @@ export default function CardSettings(props) {
         }
         data.gCowNo = ccowNo
         data.gCowStatus = gStatus
-        data.gMeasureDate = selectedDate
+        data.cvgDate = selectedDate
         data.user_updated = 'Activex'
-        //const measureData = JSON.stringify(data.gMeasureDate = selectedDate)
-        //console.log(data)
-        //measureData.gMeasureDate = selectedDate;
         setSaveStatus(true)
         //console.log(data)
-        if (gTranId === null) {
+        if (cvgTranId === null) {
             const measure = await CreateMeasure(data);
             //console.log(measure)
             if (measure) {
                 setSaveStatus(false)
                 setaddStatus('edit')
-                setgTranId(measure.gTranId)
+                setcvgTranId(measure.cvgTranId)
             }
         }
         else {
-            data.gTranId = gTranId
+            data.cvgTranId = cvgTranId
             const measure = await UpdateMeasure(data);
             //console.log(measure)
             if (measure) {
@@ -240,10 +239,10 @@ export default function CardSettings(props) {
                     {error}
                 </SuiTypography>
             </SuiBox>}
-            {data != '' && <Card>
+            {reTurnData != '' && <Card>
                 <SuiBox p={2} mb={0} display="flex" justifyContent="space-between">
                     <SuiBox textAlign="left">
-                        {gTranId === null ? <SuiTypography variant="h5" fontWeight="medium">
+                        {cvgTranId === null ? <SuiTypography variant="h5" fontWeight="medium">
                             เพิ่มข้อมูล{title}
                         </SuiTypography> : <SuiTypography variant="h5" fontWeight="medium">
                             แก้ไขข้อมูล{title}
@@ -256,7 +255,7 @@ export default function CardSettings(props) {
                             </SuiTypography>
                         </SuiBox> :
                             <SuiBox display="flex" justifyContent="center">
-                                {gTranId === null || addStatus == 'add' ?
+                                {cvgTranId === null || addStatus == 'add' ?
                                     <SuiBox display="flex" justifyContent="center">
                                         <Tooltip title="บันทึกข้อมูล">
                                             <Button onClick={handleSubmit(onSubmit)} variant="contained" color="light" startIcon={<SaveIcon color="info" />}>
@@ -300,7 +299,7 @@ export default function CardSettings(props) {
 
                 </SuiBox>
                 <SuiBox pt={2} pb={3} px={3}>
-                    <p>{gTranId} {addStatus} {checkStaffStatus}</p>
+                    <p>{cvgTranId} {addStatus} {checkStaffStatus}</p>
                     {deleteStatus && <ConfirmDelete />}
                     <SuiBox component="form" role="form" onSubmit={handleSubmit(onSubmit)}>
                         <SuiBox display="flex" justifyContent="space-between">
@@ -361,30 +360,30 @@ export default function CardSettings(props) {
                             <SuiBox mb={2} width="48%">
                                 <SuiBox mb={1} ml={0.5}>
                                     <SuiTypography component="label" variant="caption" fontWeight="bold">
-                                        สถานะการวัดน้ำหนัก
+                                        วันที่ผสม
                                     </SuiTypography>
                                 </SuiBox>
-                                <SuiInput type="text" placeholder="สถานะการวัดน้ำหนัก" disabled value={gStatusName} />
+                                <SuiInput type="text" placeholder="วันที่ผสม" disabled value={maDate} />
                             </SuiBox>
                             <SuiBox mb={2} width="48%">
                                 <SuiBox mb={1} ml={0.5}>
                                     <SuiTypography component="label" variant="caption" fontWeight="bold">
-                                        เพศ
+                                        หมายเลขน้ำเชื้อ
                                     </SuiTypography>
                                 </SuiBox>
-                                <SuiInput type="text" placeholder="เพศ" disabled value={cSex_title} />
+                                <SuiInput type="text" placeholder="หมายเลขน้ำเชื้อ" disabled value={maSemenId} />
                             </SuiBox>
                         </SuiBox>
                         <SuiBox display="flex" justifyContent="space-between">
                             <SuiBox mb={2} width="48%">
                                 <SuiBox mb={1} ml={0.5}>
                                     <SuiTypography component="label" variant="caption" fontWeight="bold">
-                                        วันที่วัดน้ำหนัก
+                                        วันที่คลอด
                                     </SuiTypography>
                                 </SuiBox>
                                 <SuiBox display="flex" justifyContent="space-between">
-                                    <SuiInput type="text" placeholder="วันที่วัดน้ำหนัก" value={gMeasureDate} {...register("gMeasureDate", { required: true, maxLength: 10 })}
-                                        disabled={gTranId === null || addStatus == 'add' ? false : true}
+                                    <SuiInput type="text" placeholder="วันที่คลอด" value={cvgDate} {...register("cvgDate", { required: true, maxLength: 10 })}
+                                        disabled={cvgTranId === null || addStatus == 'add' ? false : true}
                                     />
                                     <SuiBox mt={1} ml={0.5}>
                                         <WatDatePicker
@@ -403,18 +402,18 @@ export default function CardSettings(props) {
                                     </SuiBox>
                                 </SuiBox>
                             </SuiBox>
-                            <SuiBox mb={2} width="48%">
+                            {/*<SuiBox mb={2} width="48%">
                                 <SuiBox mb={1} ml={0.5}>
                                     <SuiTypography component="label" variant="caption" fontWeight="bold">
                                         น้ำหนัก
                                     </SuiTypography>
                                 </SuiBox>
                                 <SuiInput {...register("gWeight", { required: true, min: 10, max: 100 })} type="number" placeholder="น้ำหนัก" value={gWeight} onChange={e => setgWeight(e.target.value)}
-                                    disabled={gTranId === null || addStatus == 'add' ? false : true}
+                                    disabled={cvgTranId === null || addStatus == 'add' ? false : true}
                                 />
-                            </SuiBox>
+                    </SuiBox>*/}
                         </SuiBox>
-                        <SuiBox justifyContent="space-between">
+                        {/*<SuiBox justifyContent="space-between">
                             <SuiBox mb={2}>
                                 <SuiBox mb={1} ml={0.5}>
                                     <SuiTypography component="label" variant="caption" fontWeight="bold">
@@ -422,8 +421,42 @@ export default function CardSettings(props) {
                                     </SuiTypography>
                                 </SuiBox>
                                 <SuiInput {...register("gRemark", { pattern: /^[ก-๏\sA-Za-z]+$/i, maxLength: 50 })} type="text" placeholder="หมายเหตุ" value={gRemark} onChange={e => setgRemark(e.target.value)}
-                                    disabled={gTranId === null || addStatus == 'add' ? false : true}
+                                    disabled={cvcvgTranId === null || addStatus == 'add' ? false : true}
                                 />
+                            </SuiBox>
+                </SuiBox>*/}
+                        <SuiBox display="flex" justifyContent="space-between">
+                            <SuiBox mb={2} width="48%">
+                                <SuiBox mb={1} ml={0.5}>
+                                    <SuiTypography component="label" variant="caption" fontWeight="bold">
+                                        ลูกตัวที่1
+                                    </SuiTypography>
+                                </SuiBox>
+                                <Select
+                                    value={firstChild}
+                                    disabled={cvgTranId === null || addStatus == 'add' ? false : true}
+                                    onChange={e => setfirstChild(e.target.value)}
+                                >
+                                    <MenuItem value={"0"}><em>None</em></MenuItem>
+                                    <MenuItem value={"M"}>ตัวผู้</MenuItem>
+                                    <MenuItem value={"F"}>ตัวเมีย</MenuItem>
+                                </Select>
+                            </SuiBox>
+                            <SuiBox mb={2} width="48%">
+                                <SuiBox mb={1} ml={0.5}>
+                                    <SuiTypography component="label" variant="caption" fontWeight="bold">
+                                        ลูกตัวที่2
+                                    </SuiTypography>
+                                </SuiBox>
+                                <Select
+                                    value={secondChild}
+                                    disabled={cvgTranId === null || addStatus == 'add' ? false : true}
+                                    onChange={e => setSecondChild(e.target.value)}
+                                >
+                                    <MenuItem value={"0"}><em>None</em></MenuItem>
+                                    <MenuItem value={"M"}>ตัวผู้</MenuItem>
+                                    <MenuItem value={"F"}>ตัวเมีย</MenuItem>
+                                </Select>
                             </SuiBox>
                         </SuiBox>
                         <SuiBox display="flex" justifyContent="space-between">
